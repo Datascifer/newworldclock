@@ -8,21 +8,31 @@ document.addEventListener("DOMContentLoaded", () => {
     const clockContainer = document.getElementById("clock-container");
 
     function updateClocks() {
-        clockContainer.innerHTML = "";
-        cities.forEach(({ city, timezone }) => {
-            fetch("/time", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ city, timezone }),
-            })
-                .then((res) => res.json())
-                .then((data) => {
-                    const clock = document.createElement("div");
-                    clock.className = "clock";
-                    clock.innerHTML = `<h2>${city}</h2><p>${data.time}</p>`;
-                    clockContainer.appendChild(clock);
-                });
-        });
+    cities.forEach(({ city, timezone }) => {
+        const clockId = `clock-${city.replace(/\s+/g, '-')}`; // Unique ID for each city
+        let clock = document.getElementById(clockId);
+
+        // If the clock element doesn't exist, create it
+        if (!clock) {
+            clock = document.createElement("div");
+            clock.id = clockId;
+            clock.className = "clock";
+            clock.innerHTML = `<h2>${city}</h2><p id="time-${clockId}"></p>`;
+            clockContainer.appendChild(clock);
+        }
+
+        // Update only the time element inside the clock
+        fetch("/time", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ city, timezone }),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                const timeElement = document.getElementById(`time-${clockId}`);
+                timeElement.textContent = data.time; // Update time directly
+            });
+    });
     }
 
     updateClocks();
