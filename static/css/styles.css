@@ -1,3 +1,4 @@
+/* General Styling */
 body {
     font-family: 'Arial', sans-serif;
     margin: 0;
@@ -44,6 +45,7 @@ body {
     text-align: center;
     backdrop-filter: blur(10px);
     color: #fff;
+    transition: all 0.3s ease-in-out;
 }
 
 .ai-assistant {
@@ -67,4 +69,36 @@ button {
 
 button:hover {
     background: #3b8a8f;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    #clock-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .clock {
+        width: 100%;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background: linear-gradient(135deg, #121212, #323232);
+        color: #fff;
+    }
+
+    .clock {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    button {
+        background: #2a9d8f;
+    }
+
+    button:hover {
+        background: #21867a;
+    }
 }
