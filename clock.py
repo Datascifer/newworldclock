@@ -2,20 +2,25 @@ from flask import Flask, render_template, request, jsonify
 from datetime import datetime
 import pytz
 import openai
+from flask_caching import Cache
 
 # Initialize Flask app
 app = Flask(__name__)
 
+# Caching configuration
+cache = Cache(app, config={'CACHE_TYPE': 'SimpleCache', 'CACHE_DEFAULT_TIMEOUT': 30})
+
 # Set OpenAI API key
 openai.api_key = "<YOUR_OPENAI_API_KEY>"
 
-# Route for the main page
+# Home route
 @app.route("/")
 def index():
     return render_template("index.html")
 
-# Route for fetching time data
+# Route for fetching time data (with caching)
 @app.route("/time", methods=["POST"])
+@cache.cached()
 def get_time():
     data = request.json
     city = data.get("city")
